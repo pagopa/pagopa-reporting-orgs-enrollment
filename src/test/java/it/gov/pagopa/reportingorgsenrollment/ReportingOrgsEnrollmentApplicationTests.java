@@ -1,4 +1,4 @@
-package it.gov.pagopa.ReportingOrgsEnrollment;
+package it.gov.pagopa.reportingorgsenrollment;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
