@@ -1,8 +1,10 @@
 {
 	"openapi": "3.0.1",
 	"info": {
-		"title": "OpenAPI definition",
-		"version": "v0"
+		"title": "PagoPA API Reporting Organizations Enrollments",
+		"description": "Reporting orgs enrollment project",
+		"termsOfService": "https://www.pagopa.gov.it/",
+		"version": "0.0.1"
 	},
 	"servers": [
 		{
@@ -11,10 +13,97 @@
 		}
 	],
 	"paths": {
+		"/organizations": {
+			"get": {
+				"tags": [
+					"Reporting Organizations Enrollments API"
+				],
+				"summary": "The organization get all enrollments of creditor institutions.",
+				"operationId": "getOrganizations",
+				"responses": {
+					"200": {
+						"description": "Obtained all enrollments.",
+						"headers": {
+							"X-Request-Id": {
+								"description": "This header identifies the call",
+								"schema": {
+									"type": "string"
+								}
+							}
+						},
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/OrganizationModelResponse"
+									}
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Wrong or missing function key.",
+						"headers": {
+							"X-Request-Id": {
+								"description": "This header identifies the call",
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Service unavailable.",
+						"headers": {
+							"X-Request-Id": {
+								"description": "This header identifies the call",
+								"schema": {
+									"type": "string"
+								}
+							}
+						},
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ProblemJson"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"ApiKey": []
+					},
+					{
+						"Authorization": []
+					}
+				]
+			},
+			"parameters": [
+				{
+					"name": "X-Request-Id",
+					"in": "header",
+					"description": "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
+					"schema": {
+						"type": "string"
+					}
+				},
+				{
+					"name": "X-Request-Id",
+					"in": "header",
+					"description": "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
+					"schema": {
+						"type": "string"
+					}
+				}
+			]
+		},
 		"/organizations/{organizationFiscalCode}": {
 			"get": {
 				"tags": [
-					"Enrollments API"
+					"Reporting Organizations Enrollments API"
 				],
 				"summary": "The organization get the single enrollment for the creditor institution.",
 				"operationId": "getOrganization",
@@ -30,8 +119,45 @@
 					}
 				],
 				"responses": {
+					"200": {
+						"description": "Obtained single enrollment.",
+						"headers": {
+							"X-Request-Id": {
+								"description": "This header identifies the call",
+								"schema": {
+									"type": "string"
+								}
+							}
+						},
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/OrganizationModelResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Wrong or missing function key.",
+						"headers": {
+							"X-Request-Id": {
+								"description": "This header identifies the call",
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					},
 					"404": {
 						"description": "Not found the enroll service.",
+						"headers": {
+							"X-Request-Id": {
+								"description": "This header identifies the call",
+								"schema": {
+									"type": "string"
+								}
+							}
+						},
 						"content": {
 							"application/json": {
 								"schema": {
@@ -42,6 +168,14 @@
 					},
 					"500": {
 						"description": "Service unavailable.",
+						"headers": {
+							"X-Request-Id": {
+								"description": "This header identifies the call",
+								"schema": {
+									"type": "string"
+								}
+							}
+						},
 						"content": {
 							"application/json": {
 								"schema": {
@@ -49,19 +183,6 @@
 								}
 							}
 						}
-					},
-					"200": {
-						"description": "Obtained single enrollment.",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/OrganizationModelResponse"
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Wrong or missing function key."
 					}
 				},
 				"security": [
@@ -75,7 +196,7 @@
 			},
 			"post": {
 				"tags": [
-					"Enrollments API"
+					"Reporting Organizations Enrollments API"
 				],
 				"summary": "The organization creates a creditor institution.",
 				"operationId": "createOrganization",
@@ -91,8 +212,45 @@
 					}
 				],
 				"responses": {
+					"201": {
+						"description": "Request created.",
+						"headers": {
+							"X-Request-Id": {
+								"description": "This header identifies the call",
+								"schema": {
+									"type": "string"
+								}
+							}
+						},
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/OrganizationModelResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Wrong or missing function key.",
+						"headers": {
+							"X-Request-Id": {
+								"description": "This header identifies the call",
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					},
 					"409": {
 						"description": "The organization to create already exists.",
+						"headers": {
+							"X-Request-Id": {
+								"description": "This header identifies the call",
+								"schema": {
+									"type": "string"
+								}
+							}
+						},
 						"content": {
 							"application/json": {
 								"schema": {
@@ -103,6 +261,14 @@
 					},
 					"500": {
 						"description": "Service unavailable.",
+						"headers": {
+							"X-Request-Id": {
+								"description": "This header identifies the call",
+								"schema": {
+									"type": "string"
+								}
+							}
+						},
 						"content": {
 							"application/json": {
 								"schema": {
@@ -110,19 +276,6 @@
 								}
 							}
 						}
-					},
-					"201": {
-						"description": "Request created.",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/OrganizationModelResponse"
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Wrong or missing function key."
 					}
 				},
 				"security": [
@@ -136,7 +289,7 @@
 			},
 			"delete": {
 				"tags": [
-					"Enrollments API"
+					"Reporting Organizations Enrollments API"
 				],
 				"summary": "The organization deletes the creditor institution.",
 				"operationId": "removeOrganization",
@@ -152,31 +305,16 @@
 					}
 				],
 				"responses": {
-					"500": {
-						"description": "Service unavailable.",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ProblemJson"
-								}
-							}
-						}
-					},
-					"404": {
-						"description": "Not found the creditor institution.",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ProblemJson"
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Wrong or missing function key."
-					},
 					"200": {
 						"description": "Request deleted.",
+						"headers": {
+							"X-Request-Id": {
+								"description": "This header identifies the call",
+								"schema": {
+									"type": "string"
+								}
+							}
+						},
 						"content": {
 							"application/json": {
 								"schema": {
@@ -184,28 +322,28 @@
 								}
 							}
 						}
-					}
-				},
-				"security": [
-					{
-						"ApiKey": []
 					},
-					{
-						"Authorization": []
-					}
-				]
-			}
-		},
-		"/organizations": {
-			"get": {
-				"tags": [
-					"Enrollments API"
-				],
-				"summary": "The organization get all enrollments of creditor institutions.",
-				"operationId": "getOrganizations",
-				"responses": {
-					"500": {
-						"description": "Service unavailable.",
+					"401": {
+						"description": "Wrong or missing function key.",
+						"headers": {
+							"X-Request-Id": {
+								"description": "This header identifies the call",
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not found the creditor institution.",
+						"headers": {
+							"X-Request-Id": {
+								"description": "This header identifies the call",
+								"schema": {
+									"type": "string"
+								}
+							}
+						},
 						"content": {
 							"application/json": {
 								"schema": {
@@ -214,18 +352,20 @@
 							}
 						}
 					},
-					"401": {
-						"description": "Wrong or missing function key."
-					},
-					"200": {
-						"description": "Obtained all enrollments.",
+					"500": {
+						"description": "Service unavailable.",
+						"headers": {
+							"X-Request-Id": {
+								"description": "This header identifies the call",
+								"schema": {
+									"type": "string"
+								}
+							}
+						},
 						"content": {
 							"application/json": {
 								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/OrganizationModelResponse"
-									}
+									"$ref": "#/components/schemas/ProblemJson"
 								}
 							}
 						}
@@ -239,7 +379,25 @@
 						"Authorization": []
 					}
 				]
-			}
+			},
+			"parameters": [
+				{
+					"name": "X-Request-Id",
+					"in": "header",
+					"description": "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
+					"schema": {
+						"type": "string"
+					}
+				},
+				{
+					"name": "X-Request-Id",
+					"in": "header",
+					"description": "This header identifies the call, if not passed it is self-generated. This ID is returned in the response.",
+					"schema": {
+						"type": "string"
+					}
+				}
+			]
 		}
 	},
 	"components": {
@@ -276,6 +434,20 @@
 						"type": "string"
 					}
 				}
+			}
+		},
+		"securitySchemes": {
+			"ApiKey": {
+				"type": "apiKey",
+				"description": "The API key to access this function app.",
+				"name": "Ocp-Apim-Subscription-Key",
+				"in": "header"
+			},
+			"Authorization": {
+				"type": "http",
+				"description": "JWT token get after Azure Login",
+				"scheme": "bearer",
+				"bearerFormat": "JWT"
 			}
 		}
 	}
