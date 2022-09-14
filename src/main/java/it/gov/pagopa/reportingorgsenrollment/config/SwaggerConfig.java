@@ -16,13 +16,15 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.Map;
 
+import static it.gov.pagopa.reportingorgsenrollment.util.Constants.HEADER_REQUEST_ID;
 
 @Configuration
 public class SwaggerConfig {
-    public static final String HEADER_REQUEST_ID = "X-Request-Id";
 
     @Bean
-    OpenAPI customOpenAPI(@Value("${info.application.description}") String appDescription, @Value("${info.application.version}") String appVersion) {
+    OpenAPI customOpenAPI(@Value("${info.application.title}") String appTitle,
+                                 @Value("${info.application.description}") String appDescription,
+                                 @Value("${info.application.version}") String appVersion) {
         return new OpenAPI()
                 .components(new Components()
                         .addSecuritySchemes("ApiKey", new SecurityScheme()
@@ -30,17 +32,9 @@ public class SwaggerConfig {
                                 .description("The API key to access this function app.")
                                 .name("Ocp-Apim-Subscription-Key")
                                 .in(SecurityScheme.In.HEADER))
-                        .addSecuritySchemes("Authorization",
-                                new SecurityScheme()
-                                        .type(SecurityScheme.Type.HTTP)
-                                        .description("JWT token get after Azure Login")
-                                        .name("Authorization")
-                                        .scheme("bearer")
-                                        .bearerFormat("JWT")
-                                        .in(SecurityScheme.In.HEADER))
                 )
                 .info(new Info()
-                        .title("PagoPA API Reporting Organizations Enrollments")
+                        .title(appTitle)
                         .version(appVersion)
                         .description(appDescription)
                         .termsOfService("https://www.pagopa.gov.it/"));
@@ -48,7 +42,7 @@ public class SwaggerConfig {
     }
 
     @Bean
-    public OpenApiCustomiser sortOperationsAlphabetically() {
+    OpenApiCustomiser sortOperationsAlphabetically() {
         return openApi -> {
             Paths paths = openApi.getPaths().entrySet()
                     .stream()
@@ -83,5 +77,4 @@ public class SwaggerConfig {
                                     .description("This header identifies the call"))));
         });
     }
-
 }
