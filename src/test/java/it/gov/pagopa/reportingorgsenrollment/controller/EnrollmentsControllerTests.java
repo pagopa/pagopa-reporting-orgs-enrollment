@@ -81,6 +81,15 @@ class EnrollmentsControllerTests {
     }
 	
 	@Test
+    void getOrganizations_methodNotAllowed() throws Exception {
+        String url = "/organizations";
+        mvc.perform(post(url)
+        		.contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isMethodNotAllowed());
+        
+    }
+	
+	@Test
     void deleteECEnrollment() throws Exception {
         String url = "/organizations/mockOrganizationFiscalCode";
         MvcResult result = mvc.perform(delete(url).contentType(MediaType.APPLICATION_JSON))
