@@ -22,7 +22,7 @@ import static it.gov.pagopa.reportingorgsenrollment.util.Constants.HEADER_REQUES
 public class SwaggerConfig {
 
     @Bean
-    OpenAPI customOpenAPI(@Value("${info.application.title}") String appTitle,
+    OpenAPI customOpenAPI(@Value("${info.application.name}") String appTitle,
                                  @Value("${info.application.description}") String appDescription,
                                  @Value("${info.application.version}") String appVersion) {
         return new OpenAPI()

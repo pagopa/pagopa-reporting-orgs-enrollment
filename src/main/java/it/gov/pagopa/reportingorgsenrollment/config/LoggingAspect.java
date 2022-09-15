@@ -26,7 +26,7 @@ import java.util.stream.StreamSupport;
 @Slf4j
 public class LoggingAspect {
 
-    @Value("${info.application.name}")
+    @Value("${info.application.artifactId}")
     private String name;
 
     @Value("${info.application.version}")
