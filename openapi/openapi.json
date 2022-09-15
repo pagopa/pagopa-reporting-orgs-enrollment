@@ -1,7 +1,7 @@
 {
 	"openapi": "3.0.1",
 	"info": {
-		"title": "PagoPA API Reporting Organizations Enrollments",
+		"title": "PagoPA API - Reporting Organizations Enrollments",
 		"description": "Reporting orgs enrollment project",
 		"termsOfService": "https://www.pagopa.gov.it/",
 		"version": "0.0.1"
@@ -442,12 +442,6 @@
 				"description": "The API key to access this function app.",
 				"name": "Ocp-Apim-Subscription-Key",
 				"in": "header"
-			},
-			"Authorization": {
-				"type": "http",
-				"description": "JWT token get after Azure Login",
-				"scheme": "bearer",
-				"bearerFormat": "JWT"
 			}
 		}
 	}
