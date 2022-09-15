@@ -8,9 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Spliterator;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -29,6 +26,7 @@ import com.microsoft.azure.storage.table.TableOperation;
 import it.gov.pagopa.reportingorgsenrollment.entity.OrganizationEntity;
 import it.gov.pagopa.reportingorgsenrollment.exception.AppException;
 import it.gov.pagopa.reportingorgsenrollment.initializer.Initializer;
+import it.gov.pagopa.reportingorgsenrollment.model.response.OrganizationModelResponse;
 import lombok.extern.slf4j.Slf4j;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -63,8 +61,8 @@ class EnrollmentsServiceTests {
 	
 	@Test
 	void createOrganization() {
-		OrganizationEntity oe = enrollmentsService.createOrganization("987654321");
-		assertEquals("987654321", oe.getRowKey());
+		OrganizationModelResponse oe = enrollmentsService.createOrganization("987654321");
+		assertEquals("987654321", oe.getOrganizationFiscalCode());
 		assertNotNull(oe.getOrganizationOnboardingDate());
 		assertFalse(oe.getOrganizationOnboardingDate().isEmpty());
 	}
@@ -84,7 +82,7 @@ class EnrollmentsServiceTests {
 	
 	@Test
 	void deleteOrganization() {
-		enrollmentsService.deleteOrganization("abcdefghi");
+		enrollmentsService.removeOrganization("abcdefghi");
 		// This line means the call was successful
 		assertTrue(true);
 	}
@@ -93,7 +91,7 @@ class EnrollmentsServiceTests {
 	void deleteOrganization_404() {
 		try {
 			// non-existent entity -> must raise a 404 exception
-			enrollmentsService.deleteOrganization("non-existent");
+			enrollmentsService.removeOrganization("non-existent");
 			fail();
 		} catch (AppException e) {
 			assertEquals(HttpStatus.NOT_FOUND, e.getHttpStatus());
@@ -104,8 +102,8 @@ class EnrollmentsServiceTests {
 	
 	@Test
 	void getOrganization() {
-		OrganizationEntity oe = enrollmentsService.getOrganization("123456789");
-		assertEquals("123456789", oe.getRowKey());
+		OrganizationModelResponse oe = enrollmentsService.getOrganization("123456789");
+		assertEquals("123456789", oe.getOrganizationFiscalCode());
 		assertNotNull(oe.getOrganizationOnboardingDate());
 		assertFalse(oe.getOrganizationOnboardingDate().isEmpty());
 	}
@@ -125,9 +123,8 @@ class EnrollmentsServiceTests {
 	
 	@Test
 	void getOrganizations() {
-		Spliterator<OrganizationEntity> oe = enrollmentsService.getOrganizations();
-		assertNotNull(oe);
-		List<OrganizationEntity> oeList = StreamSupport.stream(oe, false).collect(Collectors.toList());
+		List<OrganizationModelResponse> oeList = enrollmentsService.getOrganizations();
+		assertNotNull(oeList);
 		assertTrue(oeList.size() >= 1);
 	}
 	

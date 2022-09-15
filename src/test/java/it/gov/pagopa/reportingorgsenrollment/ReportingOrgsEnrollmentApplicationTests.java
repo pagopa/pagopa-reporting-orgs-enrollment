@@ -19,11 +19,6 @@ class ReportingOrgsEnrollmentApplicationTests {
 	void contextLoads() {
 		assertTrue(true); // it just tests that an error has not occurred
 	}
-	
-	@Test
-    void applicationContextLoaded() {
-        assertTrue(true); // it just tests that an error has not occurred
-    }
 
     @Test
     void applicationContextTest() {

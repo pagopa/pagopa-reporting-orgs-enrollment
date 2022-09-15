@@ -5,14 +5,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Spliterator;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import it.gov.pagopa.reportingorgsenrollment.entity.OrganizationEntity;
+import it.gov.pagopa.reportingorgsenrollment.model.response.OrganizationModelResponse;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -39,17 +39,28 @@ public class TestUtil {
 		return new ObjectMapper().writeValueAsString(object);
 	}
 
-	public static OrganizationEntity getMockOrganizationEntity() {
-
-		return new OrganizationEntity(mockOrganizationFiscalCode, LocalDateTime.now().toString());
+	public static OrganizationModelResponse getMockOrganizationEntity() {
+		return OrganizationModelResponse.builder().
+				organizationFiscalCode(mockOrganizationFiscalCode).
+				organizationOnboardingDate(LocalDateTime.now().toString()).
+				build();
 	}
 	
-	public static Spliterator<OrganizationEntity> getMockOrganizationEntitySpliterator() {
-		ArrayList<OrganizationEntity> list = new ArrayList<>();
-		list.add(new OrganizationEntity(mockOrganizationFiscalCode+"_1", LocalDateTime.now().toString()));
-		list.add(new OrganizationEntity(mockOrganizationFiscalCode+"_2", LocalDateTime.now().toString()));
-		list.add(new OrganizationEntity(mockOrganizationFiscalCode+"_3", LocalDateTime.now().toString()));
-		return list.spliterator();
+	public static List<OrganizationModelResponse> getMockOrganizationEntitySpliterator() {
+		ArrayList<OrganizationModelResponse> list = new ArrayList<>();
+		list.add(OrganizationModelResponse.builder().
+				organizationFiscalCode(mockOrganizationFiscalCode+"_1").
+				organizationOnboardingDate(LocalDateTime.now().toString()).
+				build());
+		list.add(OrganizationModelResponse.builder().
+				organizationFiscalCode(mockOrganizationFiscalCode+"_2").
+				organizationOnboardingDate(LocalDateTime.now().toString()).
+				build());
+		list.add(OrganizationModelResponse.builder().
+				organizationFiscalCode(mockOrganizationFiscalCode+"_3").
+				organizationOnboardingDate(LocalDateTime.now().toString()).
+				build());
+		return list;
 	}
 
 	
