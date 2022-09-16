@@ -43,7 +43,7 @@ npx cucumber-js -r step_definitions features/organizations.feature:46
 
 ### Note
 
-Remember to start GPS before start the tests.
+Remember to start Reporting Enrollment before start the tests.
 
 You can configure the host in `./config/properties.json` file.
 
