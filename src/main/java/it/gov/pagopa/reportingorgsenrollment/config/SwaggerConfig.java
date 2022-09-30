@@ -14,7 +14,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 import static it.gov.pagopa.reportingorgsenrollment.util.Constants.HEADER_REQUEST_ID;
 
@@ -63,11 +66,18 @@ public class SwaggerConfig {
     OpenApiCustomiser addCommonHeaders() {
         return openApi -> openApi.getPaths().forEach((key, value) -> {
 
-            // add Request-ID as request header
-            value.addParametersItem(new Parameter().in("header")
-                    .name(HEADER_REQUEST_ID)
-                    .schema(new StringSchema())
-                    .description("This header identifies the call, if not passed it is self-generated. This ID is returned in the response."));
+            // add Request-ID as request header        	
+        	var header = Optional.ofNullable(value.getParameters())
+                    .orElse(Collections.emptyList())
+                    .parallelStream()
+                    .filter(Objects::nonNull)
+                    .anyMatch(elem -> HEADER_REQUEST_ID.equals(elem.getName()));
+            if (!header) {
+                value.addParametersItem(new Parameter().in("header")
+                        .name(HEADER_REQUEST_ID)
+                        .schema(new StringSchema())
+                        .description("This header identifies the call, if not passed it is self-generated. This ID is returned in the response."));
+            }
 
             // add Request-ID as response header
             value.readOperations()

@@ -31,7 +31,7 @@ import it.gov.pagopa.reportingorgsenrollment.model.response.OrganizationModelRes
 @Validated
 public interface IEnrollmentsController {
 
-    @Operation(summary = "The organization creates a creditor institution.", security = {@SecurityRequirement(name = "ApiKey"), @SecurityRequirement(name = "Authorization")}, operationId = "createOrganization")
+    @Operation(summary = "The organization creates a creditor institution.", security = {@SecurityRequirement(name = "ApiKey")}, operationId = "createOrganization")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Request created.", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(name = "OrganizationModelResponse", implementation = OrganizationModelResponse.class))),
             @ApiResponse(responseCode = "401", description = "Wrong or missing function key.", content = @Content(schema = @Schema())),
@@ -44,7 +44,7 @@ public interface IEnrollmentsController {
             @NotBlank @PathVariable("organizationFiscalCode") String organizationFiscalCode);
     
     
-    @Operation(summary = "The organization deletes the creditor institution.", security = {@SecurityRequirement(name = "ApiKey"), @SecurityRequirement(name = "Authorization")}, operationId = "removeOrganization")
+    @Operation(summary = "The organization deletes the creditor institution.", security = {@SecurityRequirement(name = "ApiKey")}, operationId = "removeOrganization")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Request deleted.", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(name = "StringResponse", implementation = String.class))),
             @ApiResponse(responseCode = "401", description = "Wrong or missing function key.", content = @Content(schema = @Schema())),
@@ -56,7 +56,7 @@ public interface IEnrollmentsController {
     		@Parameter(description = "The fiscal code of the Organization.", required = true)
             @NotBlank @PathVariable("organizationFiscalCode") String organizationFiscalCode);
     
-    @Operation(summary = "The organization get the single enrollment for the creditor institution.", security = {@SecurityRequirement(name = "ApiKey"), @SecurityRequirement(name = "Authorization")}, operationId = "getOrganization")
+    @Operation(summary = "The organization get the single enrollment for the creditor institution.", security = {@SecurityRequirement(name = "ApiKey")}, operationId = "getOrganization")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Obtained single enrollment.", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(name = "OrganizationModelResponse", implementation = OrganizationModelResponse.class))),
             @ApiResponse(responseCode = "401", description = "Wrong or missing function key.", content = @Content(schema = @Schema())),
@@ -68,7 +68,7 @@ public interface IEnrollmentsController {
     		@Parameter(description = "The fiscal code of the Organization.", required = true)
             @NotBlank @PathVariable("organizationFiscalCode") String organizationFiscalCode);
     
-    @Operation(summary = "The organization get all enrollments of creditor institutions.", security = {@SecurityRequirement(name = "ApiKey"), @SecurityRequirement(name = "Authorization")}, operationId = "getOrganizations")
+    @Operation(summary = "The organization get all enrollments of creditor institutions.", security = {@SecurityRequirement(name = "ApiKey")}, operationId = "getOrganizations")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Obtained all enrollments.", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(name = "ListOfOrganizationModelResponse", implementation = OrganizationModelResponse.class)))),
             @ApiResponse(responseCode = "401", description = "Wrong or missing function key.", content = @Content(schema = @Schema())),
