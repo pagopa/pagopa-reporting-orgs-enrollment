@@ -1,0 +1,10 @@
+{
+  "environment": [
+    {
+      "env": "local",
+      "host": "http://localhost:8080",
+      "basePath": "organizations",
+      "numberOfEventsToPreload":"100"
+    }
+  ]
+}
