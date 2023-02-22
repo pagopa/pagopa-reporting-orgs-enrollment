@@ -3,7 +3,7 @@ microservice-chart:
   nameOverride: ""
   fullnameOverride: ""
   image:
-    repository: pagopadcommonacr.azurecr.io/pagopareportingorgsenrollment
+    repository: pagopadcommonacr.azurecr.io/pagopagpdreportingorgsenrollment
     tag: "0.0.1"
     pullPolicy: Always
   livenessProbe:
@@ -29,7 +29,7 @@ microservice-chart:
   ingress:
     create: true
     host: "weudev.gps.internal.dev.platform.pagopa.it"
-    path: /pagopa-reporting-orgs-enrollment/(.*)
+    path: /pagopa-gpd-reporting-orgs-enrollment/(.*)
   serviceAccount:
     create: false
     annotations: {}
@@ -66,9 +66,9 @@ microservice-chart:
   envSecret:
     # required
     APPLICATIONINSIGHTS_CONNECTION_STRING: 'ai-d-connection-string'
-    FLOW_SA_CONNECTION_STRING: "reporting-orgs-enrollment-d-sa-connection-string"
+    FLOW_SA_CONNECTION_STRING: "gpd-reporting-flow-d-sa-connection-string"
   keyvault:
-    name: "pagopa-d-afm-kv"
+    name: "pagopa-d-gps-kv"
     tenantId: "7788edaf-0346-4068-9d79-c868aed15b3d"
   nodeSelector: {}
   tolerations: []
