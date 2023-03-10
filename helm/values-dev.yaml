@@ -1,10 +1,10 @@
 microservice-chart:
-  namespace: gps
+  namespace: "gps"
   nameOverride: ""
   fullnameOverride: ""
   image:
     repository: pagopadcommonacr.azurecr.io/pagopareportingorgsenrollment
-    tag: "0.0.1"
+    tag: "latest"
     pullPolicy: Always
   livenessProbe:
     httpGet:
@@ -28,8 +28,8 @@ microservice-chart:
     port: 8080
   ingress:
     create: true
-    host: "your.host" # TODO set the host
-    path: /your-path-here/(.*) # TODO set your path
+    host: "weudev.gps.internal.dev.platform.pagopa.it"
+    path: /pagopa-gpd-reporting-orgs-enrollment/(.*)
   serviceAccount:
     create: false
     annotations: {}
@@ -49,8 +49,8 @@ microservice-chart:
       cpu: "0.25"
   autoscaling:
     enable: true
-    minReplica: 3
-    maxReplica: 10
+    minReplica: 1
+    maxReplica: 3
     pollingInterval: 10 # seconds
     cooldownPeriod: 50 # seconds
     triggers:
@@ -60,13 +60,15 @@ microservice-chart:
           type: Utilization # Allowed types are 'Utilization' or 'AverageValue'
           value: "75"
   envConfig:
-    FLOW_SA_CONNECTION_STRING: DefaultEndpointsProtocol=https;AccountName=pagopadflowsa;AccountKey=z92Nmp7swKo8NZdZnNyljpeLmxJDqbJ+hjZL7v8nYKHtTFi/IGV2sxXXx7Af/6xzml7deJiPAcCPXza/X3NGzg==;EndpointSuffix=core.windows.net
+    WEBSITE_SITE_NAME: 'pagopa-d-reporting-orgs-enrollment-service' # required to show cloud role name in application insights
+    LOGGING_LEVEL: "INFO"
     ORGANIZATIONS_TABLE: pagopadflowsaorgstable
   envSecret:
     # required
     APPLICATIONINSIGHTS_CONNECTION_STRING: 'ai-d-connection-string'
+    FLOW_SA_CONNECTION_STRING: "gpd-reporting-flow-d-sa-connection-string"
   keyvault:
-    name: "pagopa-d-afm-kv"
+    name: "pagopa-d-gps-kv"
     tenantId: "7788edaf-0346-4068-9d79-c868aed15b3d"
   nodeSelector: {}
   tolerations: []

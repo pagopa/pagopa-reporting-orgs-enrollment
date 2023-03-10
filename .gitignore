@@ -1,2 +1,8 @@
 target/**/*
 .vscode
+/.idea/
+/**/node_modules/
+*.iml
+**/emulatorcert.crt
+**/.DS_Store
+**/charts
