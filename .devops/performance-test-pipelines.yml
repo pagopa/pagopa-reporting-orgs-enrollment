@@ -26,6 +26,8 @@ parameters:
       - "load"
       - "spike"
       - "stress"
+      - "ramping"
+      - "constant"
   - name: "SCRIPT"
     displayName: "Script name"
     type: string
