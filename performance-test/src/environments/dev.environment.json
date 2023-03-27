@@ -2,7 +2,7 @@
   "environment": [
     {
       "env": "dev",
-      "host": "https://api.dev.platform.pagopa.it/gps/gpd-reporting-orgs-enrollment/api"
+      "host": "https://api.dev.platform.pagopa.it/gps/gpd-reporting-orgs-enrollment/api/v1"
     }
   ]
 }
