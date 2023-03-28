@@ -32,7 +32,8 @@ parameters:
     displayName: "Script name"
     type: string
     values:
-      - "full_load_test"
+      - full_load_test
+      - create_organization_quarkus
 
 steps:
   - script: |
