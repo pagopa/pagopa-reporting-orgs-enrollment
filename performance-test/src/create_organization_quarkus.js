@@ -22,15 +22,13 @@ const params = {
     },
 };
 
-const frameworkType = `?frameworkType=quarkus`
-
 export default function () {
 
   const organization_fiscal_code = randomOrg(11, "0123456789");
 
   // Create new debt position (no validity date).
 
-  var url = `${rootUrl}/organizations/${organization_fiscal_code}${frameworkType}`;
+  var url = `${rootUrl}/organizations/${organization_fiscal_code}`;
 
   var r = http.post(url, "", params);
 
