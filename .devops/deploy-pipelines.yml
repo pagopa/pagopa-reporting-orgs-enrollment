@@ -3,98 +3,164 @@ trigger: none
 pr: none
 
 pool:
-  vmImage: 'ubuntu-20.04'
+  vmImage: 'ubuntu-22.04'
 
 parameters:
-  - name: environment
+  - name: ENV
     displayName: Target Environment
     type: string
-    default: uat
+    default: dev
     values:
+      - dev
       - uat
       - prod
+  - name: SEMVER
+    displayName: "When packing a release, define the version bump to apply. Use only buildNumber or skip for manual deployment"
+    type: string
+    values:
+      - major
+      - minor
+      - patch
+      - buildNumber
+      - skip
+    default: skip
+  - name: "FORCE_REPLACE_DOCKER_IMAGE"
+    displayName: "Force the existing docker image to be replaced"
+    type: boolean
+    default: False
+    values:
+      - False
+      - True
+  - name: TEST
+    displayName: Run integration/smoke tests
+    type: boolean
+    default: true
 
 variables:
-  MAVEN_CACHE_FOLDER: $(Pipeline.Workspace)/.m2/repository
-  MAVEN_OPTS: '-Dmaven.repo.local=$(MAVEN_CACHE_FOLDER)'
-  BUILD_NUMBER: $(Build.BuildNumber)
-  imageRepository: 'cgn-onboarding-portal-backend'
-  ${{ if eq(parameters['environment'], 'uat') }}:
+  imageRepository: '$(IMAGE_REPOSITORY)'
+  nameSpace: '$(K8S_NAMESPACE)'
+
+  ${{ if eq(parameters['ENV'], 'dev') }}:
+    dockerRegistryServiceConnection: $(DEV_CONTAINER_REGISTRY)
+    dockerRegistryFqdn: $(DEV_CONTAINER_NAMESPACE)
+    kubernetesServiceConnection: '$(DEV_KUBERNETES_SERVICE_CONN)'
+    poolImage: 'pagopa-dev-linux'
+    appInsightsServiceConn: "$(TF_APPINSIGHTS_SERVICE_CONN_DEV)"
+    appInsightsResourceId: "$(TF_APPINSIGHTS_RESOURCE_ID_DEV)"
+  ${{ if eq(parameters['ENV'], 'uat') }}:
     dockerRegistryServiceConnection: $(UAT_CONTAINER_REGISTRY)
-    dockerNamespace: microserviceuarc.azurecr.io
-    connectedServiceName: $(UAT_AZURE_SUBSCRIPTION)
-    webAppName: $(UAT_WEB_APP_NAME)
-  ${{ if eq(parameters['environment'], 'prod') }}:
+    dockerRegistryFqdn: $(UAT_CONTAINER_NAMESPACE)
+    kubernetesServiceConnection: '$(UAT_KUBERNETES_SERVICE_CONN)'
+    poolImage: 'pagopa-uat-linux'
+    appInsightsServiceConn: "$(TF_APPINSIGHTS_SERVICE_CONN_UAT)"
+    appInsightsResourceId: "$(TF_APPINSIGHTS_RESOURCE_ID_UAT)"
+  ${{ if eq(parameters['ENV'], 'prod') }}:
     dockerRegistryServiceConnection: $(PROD_CONTAINER_REGISTRY)
-    dockerNamespace: microserviceparc.azurecr.io
-    connectedServiceName: $(PROD_AZURE_SUBSCRIPTION)
-    webAppName: $(PROD_WEB_APP_NAME)
-steps:
-  - task: Bash@3
-    displayName: Check Version and Branch
-    inputs:
-      targetType: 'inline'
-      script: |
-        version=$(cat pom.xml | grep '^.*<version>' | sed -n 2p | awk -F'[><]' '{print $3}')
-        branch="$(Build.SourceBranch)"
-        if [[ "$branch" != "refs/heads/master" && ! "$branch" =~ "refs/tags/.*" && "${{ parameters.environment }}" == "prod" ]]; then
-           echo "Deploy branch $branch is not allowed."
-           exit 1
-        fi
-        if [[ "$version" == *SNAPSHOT && "${{ parameters.environment }}" == "prod" ]]; then
-           echo "Version $version is not allowed."
-           exit 1
-        fi
-      failOnStderr: true
+    dockerRegistryFqdn: $(PROD_CONTAINER_NAMESPACE)
+    kubernetesServiceConnection: '$(PROD_KUBERNETES_SERVICE_CONN)'
+    poolImage: 'pagopa-prod-linux'
+    appInsightsServiceConn: "$(TF_APPINSIGHTS_SERVICE_CONN_PROD)"
+    appInsightsResourceId: "$(TF_APPINSIGHTS_RESOURCE_ID_PROD)"
 
-  - task: Cache@2
-    inputs:
-      key: 'maven | "$(Agent.OS)" | pom.xml'
-      restoreKeys: |
-        maven | "$(Agent.OS)"
-        maven
-      path: $(MAVEN_CACHE_FOLDER)
-    displayName: Cache Maven local repo
+  ${{ if eq(variables['Build.SourceBranchName'], 'merge') }}:
+    sourceBranch: "main" # force to main branch
+  ${{ if ne(variables['Build.SourceBranchName'], 'merge') }}:
+    sourceBranch: ${{ variables['Build.SourceBranchName'] }}
 
-  - task: Maven@3
-    inputs:
-      mavenPomFile: 'pom.xml'
-      mavenOptions: '-Xmx3072m $(MAVEN_OPTS)'
-      javaHomeOption: 'JDKVersion'
-      jdkVersionOption: '1.11'
-      jdkArchitectureOption: 'x64'
-      publishJUnitResults: true
-      testResultsFiles: '**/surefire-reports/TEST-*.xml'
-      goals: 'package'
-      sonarQubeRunAnalysis: false
 
-  - task: Bash@3
-    displayName: Get POM version
-    name: getpomversion
-    inputs:
-      targetType: 'inline'
-      script: |
-        version=$(cat pom.xml | grep '^.*<version>' | sed -n 2p | awk -F'[><]' '{print $3}')
-        echo "##vso[task.setvariable variable=outputpomversion;isOutput=true]$version"
-      failOnStderr: true
 
-  - task: Docker@2
-    displayName: Build and push an image to container registry
-    inputs:
-      containerRegistry: '$(dockerRegistryServiceConnection)'
-      repository: '$(imageRepository)'
-      command: 'buildAndPush'
-      tags: |
-        $(Build.BuildId)
-        latest
-        $(getpomversion.outputpomversion)
+resources:
+  repositories:
+    - repository: pagopaCommons
+      type: github
+      name: pagopa/azure-pipeline-templates
+      ref: refs/tags/v3.1.0
+      endpoint: 'io-azure-devops-github-ro'
 
-  - task: AzureRMWebAppDeployment@4
-    displayName: Azure App Service Deploy
-    inputs:
-      appType: webAppContainer
-      ConnectedServiceName: '$(connectedServiceName)'
-      WebAppName: '$(webAppName)'
-      DockerNamespace: '$(dockerNamespace)'
-      DockerRepository: '$(imageRepository)'
-      DockerImageTag: '$(Build.BuildId)'
+stages:
+
+  # Create a release on GitHub
+  - stage: Release
+    jobs:
+      - job: make_release
+        steps:
+          - checkout: self
+            clean: true
+            persistCredentials: true
+
+          - ${{ if ne(parameters.SEMVER, 'skip') }}:
+              - template: templates/maven-github-release/template.yaml@pagopaCommons
+                parameters:
+                  release_branch: $(sourceBranch)
+                  gitEmail: $(GIT_EMAIL)
+                  gitUsername: $(GIT_USERNAME)
+                  gitHubConnection: $(GITHUB_CONNECTION)
+                  ${{ if ne(parameters.SEMVER, 'skip') }}:
+                    semver: '${{ parameters.SEMVER }}'
+                  ${{ if eq(parameters.SEMVER, 'skip') }}:
+                    semver: 'buildNumber' # this case is impossible due to main condition, but it is necessary to work property
+
+          - template: templates/maven-github-current-version/template.yaml@pagopaCommons
+
+  # Build and Push Docker Image
+  - stage: Build
+    dependsOn: Release
+    variables:
+      current_version: $[ stageDependencies.Release.make_release.outputs['current_version.value'] ]
+    jobs:
+      - job: "build"
+        steps:
+          - checkout: self
+            persistCredentials: true
+
+          - script: |
+              git checkout $(sourceBranch)
+            displayName: Checkout and update branch
+
+          - template: templates/docker-release/template.yaml@pagopaCommons
+            parameters:
+              CONTAINER_REGISTRY_SERVICE_CONN: $(dockerRegistryServiceConnection)
+              CONTAINER_REGISTRY_FQDN: $(dockerRegistryFqdn)
+              DOCKER_IMAGE_NAME: $(imageRepository)
+              DOCKER_IMAGE_TAG: $(current_version)
+              FORCE_REPLACE_DOCKER_IMAGE: ${{ parameters.FORCE_REPLACE_DOCKER_IMAGE }}
+
+  # Deploy on K8s with Helm
+  - stage: Deploy
+    dependsOn:
+      - Release
+      - Build
+    variables:
+      deploy_version: $[ stageDependencies.Release.make_release.outputs['current_version.value'] ]
+    jobs:
+      - deployment: "deploy"
+        pool:
+          name: $(poolImage)
+        environment: ${{ parameters['ENV'] }}
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+                  persistCredentials: true
+
+                - script: |
+                    git checkout $(sourceBranch)
+                  displayName: Checkout and update branch
+
+                - template: templates/helm-microservice-chart-setup/template.yaml@pagopaCommons
+                  parameters:
+                    DEPLOY_VERSION: $(deploy_version)
+
+                - template: templates/helm-microservice-chart-deploy/template.yaml@pagopaCommons
+                  parameters:
+                    DO_DEPLOY: true
+                    ENV: ${{ parameters['ENV'] }}
+                    KUBERNETES_SERVICE_CONN: ${{ variables.kubernetesServiceConnection }}
+                    NAMESPACE: $(nameSpace)
+                    APP_NAME: $(imageRepository)
+                    VALUE_FILE: "helm/values-${{ parameters['ENV'] }}.yaml"
+                    DEPLOY_VERSION: $(deploy_version)
+                    APPINSIGHTS_SERVICE_CONN: ${{ variables.appInsightsServiceConn }}
+                    APPINSIGHTS_RESOURCE_ID: ${{ variables.appInsightsResourceId }}
+
