@@ -4,7 +4,7 @@ microservice-chart:
   fullnameOverride: ""
   image:
     repository: pagopapcommonacr.azurecr.io/pagopareportingorgsenrollment
-    tag: "latest"
+    tag: "0.1.0"
     pullPolicy: Always
   livenessProbe:
     httpGet:
