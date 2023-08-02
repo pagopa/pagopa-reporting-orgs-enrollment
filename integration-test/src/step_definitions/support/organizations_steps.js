@@ -34,7 +34,7 @@ When('the organization {string} enrollment', async function (action) {
 	if (action==="creates"){
 		responseToCheck = await createOrganization(idOrg);
     	// save data
-    	organization = responseToCheck.data;
+    	organization = responseToCheck && responseToCheck.data;
 	} else if (action==="deletes"){
     	responseToCheck = await removeOrganization(idOrg);
     } else if (action==="gets"){
