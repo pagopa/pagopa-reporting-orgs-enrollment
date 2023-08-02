@@ -3,7 +3,7 @@ const axios = require("axios");
 const app_host = process.env.reporting_enrollment_host;
 
 function get(url) {
-    return axios.get(reporting_enrollment_host + url)
+    return axios.get(app_host + url)
          .then(res => {
              return res;
          })
@@ -13,7 +13,7 @@ function get(url) {
 }
 
 function post(url, body) {
-    return axios.post(reporting_enrollment_host + url, body)
+    return axios.post(app_host + url, body)
         .then(res => {
             return res;
         })
@@ -23,7 +23,7 @@ function post(url, body) {
 }
 
 function put(url, body) {
-    return axios.put(reporting_enrollment_host + url, body)
+    return axios.put(app_host + url, body)
         .then(res => {
             return res;
         })
@@ -34,7 +34,7 @@ function put(url, body) {
 
 
 function del(url) {
-    return axios.delete(reporting_enrollment_host + url)
+    return axios.delete(app_host + url)
         .then(res => {
             return res;
         })
