@@ -55,3 +55,9 @@ data "azurerm_key_vault_secret" "key_vault_cucumber_token" {
   key_vault_id = data.azurerm_key_vault.key_vault.id
 }
 
+data "azurerm_key_vault_secret" "key_vault_integration_subkey" {
+  count  = var.env_short != "p" ? 1 : 0
+  name = format("gpd-%s-reporting-enrollment-subscription-key", var.env_short)
+  key_vault_id = data.azurerm_key_vault.domain_key_vault.id
+}
+

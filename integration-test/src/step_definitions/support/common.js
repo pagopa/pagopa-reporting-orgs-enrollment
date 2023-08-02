@@ -1,9 +1,6 @@
 const axios = require("axios");
-const fs = require('fs');
 
-let rawdata = fs.readFileSync('./config/properties.json');
-let properties = JSON.parse(rawdata);
-const reporting_enrollment_host = properties.reporting_enrollment_host;
+const app_host = process.env.reporting_enrollment_host;
 
 function get(url) {
     return axios.get(reporting_enrollment_host + url)
