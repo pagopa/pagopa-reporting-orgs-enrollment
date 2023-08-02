@@ -1,0 +1,9 @@
+{
+  "environment": [
+    {
+      "env": "uat",
+      "host": "https://api.uat.platform.pagopa.it/gps/gpd-reporting-orgs-enrollment/api/v1"
+    }
+  ]
+}
+
