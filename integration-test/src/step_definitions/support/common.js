@@ -1,9 +1,14 @@
 const axios = require("axios");
 
 const app_host = process.env.reporting_enrollment_host;
+const subkey = process.env.API_SUBSCRIPTION_KEY;
 
 function get(url) {
-    return axios.get(app_host + url)
+    return axios.get(app_host + url, {
+            headers: {
+                "Ocp-Apim-Subscription-Key": process.env.API_SUBSCRIPTION_KEY
+            }
+        })
          .then(res => {
              return res;
          })
@@ -13,7 +18,11 @@ function get(url) {
 }
 
 function post(url, body) {
-    return axios.post(app_host + url, body)
+    return axios.post(app_host + url, body, {
+            headers: {
+                "Ocp-Apim-Subscription-Key": process.env.API_SUBSCRIPTION_KEY
+            }
+        })
         .then(res => {
             return res;
         })
@@ -23,7 +32,11 @@ function post(url, body) {
 }
 
 function put(url, body) {
-    return axios.put(app_host + url, body)
+    return axios.put(app_host + url, body, {
+            headers: {
+                "Ocp-Apim-Subscription-Key": process.env.API_SUBSCRIPTION_KEY
+            }
+        })
         .then(res => {
             return res;
         })
@@ -34,7 +47,11 @@ function put(url, body) {
 
 
 function del(url) {
-    return axios.delete(app_host + url)
+    return axios.delete(app_host + url, {
+            headers: {
+                "Ocp-Apim-Subscription-Key": process.env.API_SUBSCRIPTION_KEY
+            }
+        })
         .then(res => {
             return res;
         })
