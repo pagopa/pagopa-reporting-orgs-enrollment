@@ -4,7 +4,7 @@ microservice-chart:
   fullnameOverride: ""
   image:
     repository: ghcr.io/pagopa/pagopa-reporting-orgs-enrollment
-    tag: "0.1.6"
+    tag: "0.1.6-1-PAGOPA-1668-update-gpd-reporting-chart"
     pullPolicy: Always
   livenessProbe:
     httpGet:
@@ -83,15 +83,16 @@ microservice-chart:
   nodeSelector: {}
   tolerations: []
   affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-                - key: node_type
-                  operator: In
-                  values:
-                    - "user"
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: node_type
+                operator: In
+                values:
+                  - "user"
   canaryDelivery:
     deployment:
       image:
         tag: 0.1.6
+    create: false
