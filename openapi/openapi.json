@@ -4,7 +4,7 @@
     "title": "PagoPA API - Reporting Organizations Enrollments",
     "description": "Reporting orgs enrollment project",
     "termsOfService": "https://www.pagopa.gov.it/",
-    "version": "0.1.6"
+    "version": "0.1.6-4-PAGOPA-1668-update-gpd-reporting-chart"
   },
   "servers": [
     {
