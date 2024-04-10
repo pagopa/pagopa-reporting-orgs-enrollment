@@ -12,7 +12,7 @@
 
 	<groupId>it.gov.pagopa</groupId>
 	<artifactId>ReportingOrgsEnrollment</artifactId>
-	<version>0.1.6-1-PAGOPA-1668-update-gpd-reporting-chart</version>
+	<version>0.1.6-2-PAGOPA-1668-update-gpd-reporting-chart</version>
 	<name>PagoPA API - Reporting Organizations Enrollments</name>
 	<description>Reporting orgs enrollment project</description>
 	<properties>
