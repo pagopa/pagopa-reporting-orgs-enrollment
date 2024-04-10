@@ -29,7 +29,7 @@ microservice-chart:
       - 8080
   ingress:
     create: true
-    host: "weuprod.gps.internal.uat.platform.pagopa.it"
+    host: "weuprod.gps.internal.platform.pagopa.it"
     path: /pagopa-gpd-reporting-orgs-enrollment/(.*)
     servicePort: 8080
   serviceAccount:
