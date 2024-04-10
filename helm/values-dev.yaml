@@ -4,7 +4,7 @@ microservice-chart:
   fullnameOverride: ""
   image:
     repository: ghcr.io/pagopa/pagopa-reporting-orgs-enrollment
-    tag: "0.1.6-2-PAGOPA-1668-update-gpd-reporting-chart"
+    tag: "0.1.6-3-PAGOPA-1668-update-gpd-reporting-chart"
     pullPolicy: Always
   livenessProbe:
     httpGet:
