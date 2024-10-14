@@ -16,7 +16,7 @@
 	<name>PagoPA API - Reporting Organizations Enrollments</name>
 	<description>Reporting orgs enrollment project</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 		<springdoc-version>1.6.11</springdoc-version>
 		<modelmapper-version>3.1.0</modelmapper-version>
 		<testcontainers.version>1.17.2</testcontainers.version>
