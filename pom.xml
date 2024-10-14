@@ -73,6 +73,11 @@
 			<artifactId>junit-jupiter</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>co.elastic.logging</groupId>
+			<artifactId>logback-ecs-encoder</artifactId>
+			<version>1.6.0</version>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>

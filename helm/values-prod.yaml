@@ -62,7 +62,9 @@ microservice-chart:
           type: Utilization # Allowed types are 'Utilization' or 'AverageValue'
           value: "75"
   envConfig:
+    ENV: 'prod'
     WEBSITE_SITE_NAME: 'pagopa-reporting-orgs-enrollment-service' # required to show cloud role name in application insights
+    SERVICE_NAME: 'pagopa-reporting-orgs-enrollment'
     LOGGING_LEVEL: "INFO"
     ORGANIZATIONS_TABLE: pagopapflowsaorgstable
   envSecret:
