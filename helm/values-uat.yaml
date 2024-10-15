@@ -4,7 +4,7 @@ microservice-chart:
   fullnameOverride: ""
   image:
     repository: ghcr.io/pagopa/pagopa-reporting-orgs-enrollment
-    tag: "0.1.9"
+    tag: "0.1.9-3-PAGOPA-2251-pagopa-reporting-orgs-enrollment"
     pullPolicy: Always
   livenessProbe:
     httpGet:
@@ -62,7 +62,9 @@ microservice-chart:
           type: Utilization # Allowed types are 'Utilization' or 'AverageValue'
           value: "75"
   envConfig:
+    ENV: 'uat'
     WEBSITE_SITE_NAME: 'pagopa-u-reporting-orgs-enrollment-service' # required to show cloud role name in application insights
+    SERVICE_NAME: 'pagopa-reporting-orgs-enrollment'
     LOGGING_LEVEL: "INFO"
     ORGANIZATIONS_TABLE: pagopauflowsaorgstable
   envSecret:

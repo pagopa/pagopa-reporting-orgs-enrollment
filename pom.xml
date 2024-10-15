@@ -12,11 +12,11 @@
 
 	<groupId>it.gov.pagopa</groupId>
 	<artifactId>ReportingOrgsEnrollment</artifactId>
-	<version>0.1.9</version>
+	<version>0.1.9-3-PAGOPA-2251-pagopa-reporting-orgs-enrollment</version>
 	<name>PagoPA API - Reporting Organizations Enrollments</name>
 	<description>Reporting orgs enrollment project</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 		<springdoc-version>1.6.11</springdoc-version>
 		<modelmapper-version>3.1.0</modelmapper-version>
 		<testcontainers.version>1.17.2</testcontainers.version>
@@ -72,6 +72,11 @@
 			<groupId>org.testcontainers</groupId>
 			<artifactId>junit-jupiter</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>co.elastic.logging</groupId>
+			<artifactId>logback-ecs-encoder</artifactId>
+			<version>1.6.0</version>
 		</dependency>
 	</dependencies>
 
