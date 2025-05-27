@@ -2,8 +2,8 @@ apiVersion: v2
 name: pagopa-reporting-orgs-enrollment
 description: Microservice that handles the GPD reporting organizations enrollment
 type: application
-version: 0.20.0
-appVersion: 0.1.12-PIDM-491-workload-identity
+version: 0.21.0
+appVersion: 0.1.13
 dependencies:
   - name: microservice-chart
     version: 7.5.0
